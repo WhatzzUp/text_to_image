@@ -1,0 +1,206 @@
+{
+  "input": {
+    "workflow": {
+      "82": {
+        "inputs": {},
+        "class_type": "Label (rgthree)",
+        "_meta": {
+          "title": "Wan 2.2 T2I 14b GGUF + 4 Step Lora + Upscale Insta Portrait"
+        }
+      },
+      "110": {
+        "inputs": {
+          "filename": "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+        },
+        "class_type": "CLIPLoader",
+        "_meta": {
+          "title": "CLIPLoader"
+        }
+      },
+      "111": {
+        "inputs": {
+          "filename": "wan_2.1_vae.safetensors"
+        },
+        "class_type": "VAELoader",
+        "_meta": {
+          "title": "VAELoader"
+        }
+      },
+      "112": {
+        "inputs": {
+          "text": "hyper-realistic full-body portrait of a 28-year-old woman (caucasian) with brunette long wavy hair wearing minimal in standing pose studio environment soft lighting. Exquisitely detailed skin texture, lifelike fabric folds, realistic lighting, 8K ultra-high resolution, Emphasize correct anatomy, realistic eyes with clear iris detail, natural and well-formed hands with distinct fingers, proper feet and toes visible, well-posed limbs, proportional body parts, subtle shadows and highlights, sharp detail, no distortions.",
+          "clip": [
+            "138",
+            1
+          ]
+        },
+        "class_type": "CLIPTextEncode",
+        "_meta": {
+          "title": "CLIP Text Encode (Positive Prompt)"
+        }
+      },
+      "115": {
+        "inputs": {
+          "samples": [
+            "170",
+            0
+          ],
+          "vae": [
+            "111",
+            0
+          ]
+        },
+        "class_type": "VAEDecode",
+        "_meta": {
+          "title": "VAEDecode"
+        }
+      },
+      "117": {
+        "inputs": {
+          "text": "Overexposure, static, blurred details, subtitles, paintings, pictures, still, overall gray, worst quality, low quality, JPEG compression residue, ugly, mutilated, redundant fingers, poorly painted hands, poorly painted faces, deformed, disfigured, deformed limbs, fused fingers, cluttered background, three legs, many people in the background, upside down, out of frame, watermark, signature, text overlay, artifacts, distortion, duplicated body parts, bad anatomy, missing limbs, unnatural pose, cross-eyed, asymmetrical eyes, misaligned pupils, extra arms, extra legs, extra head, floating limbs, stretched body, unrealistic proportions, doll-like skin, flat lighting, harsh shadows, underexposed, overprocessed, over-saturated, unrealistic reflections, plastic texture, broken symmetry, dirty background, noisy image, color banding, wrong perspective, inconsistent light source, glitch, chromatic aberration, posterization, poor composition, cropped head, low contrast, pixelated edges, grainy, bad framing, tilted horizon, messy details, double exposure, inconsistent hands, duplicate people, blurry background, lens distortion, smudged details, washed-out colors, bad rendering.",
+          "clip": [
+            "138",
+            1
+          ]
+        },
+        "class_type": "CLIPTextEncode",
+        "_meta": {
+          "title": "CLIP Text Encode (Negative Prompt)"
+        }
+      },
+      "124": {
+        "inputs": {
+          "filename": "Wan2.2-T2V-A14B-LowNoise-Q8_0.gguf"
+        },
+        "class_type": "UnetLoaderGGUF",
+        "_meta": {
+          "title": "UnetLoaderGGUF"
+        }
+      },
+      "126": {
+        "inputs": {
+          "value": 1,
+          "model": [
+            "144",
+            0
+          ]
+        },
+        "class_type": "ModelSamplingSD3",
+        "_meta": {
+          "title": "ModelSamplingSD3"
+        }
+      },
+      "127": {
+        "inputs": {
+          "filename_prefix": "Insta",
+          "images": [
+            "174",
+            0
+          ]
+        },
+        "class_type": "SaveImage",
+        "_meta": {
+          "title": "SaveImage"
+        }
+      },
+      "137": {
+        "inputs": {
+          "value": 3840
+        },
+        "class_type": "EmptyHunyuanLatentVideo",
+        "_meta": {
+          "title": "EmptyHunyuanLatentVideo"
+        }
+      },
+      "138": {
+        "inputs": {
+          "value": {},
+          "model": [
+            "124",
+            0
+          ],
+          "clip": [
+            "110",
+            0
+          ]
+        },
+        "class_type": "Power Lora Loader (rgthree)",
+        "_meta": {
+          "title": "Power Lora Loader (rgthree)"
+        }
+      },
+      "144": {
+        "inputs": {
+          "value": 11,
+          "model": [
+            "138",
+            0
+          ],
+          "conditioning": [
+            "117",
+            0
+          ]
+        },
+        "class_type": "WanVideoNAG",
+        "_meta": {
+          "title": "WanVideoNAG"
+        }
+      },
+      "170": {
+        "inputs": {
+          "seed": 578449438345039,
+          "steps": 8,
+          "cfg": 3,
+          "sampler_name": "euler",
+          "scheduler": "beta",
+          "denoise": 1,
+          "model": [
+            "126",
+            0
+          ],
+          "positive": [
+            "112",
+            0
+          ],
+          "negative": [
+            "117",
+            0
+          ],
+          "latent_image": [
+            "137",
+            0
+          ]
+        },
+        "class_type": "KSampler",
+        "_meta": {
+          "title": "KSampler"
+        }
+      },
+      "174": {
+        "inputs": {
+          "upscale_method": "lanczos",
+          "width": 1080,
+          "height": 1920,
+          "crop": "center",
+          "image": [
+            "115",
+            0
+          ]
+        },
+        "class_type": "ImageScale",
+        "_meta": {
+          "title": "ImageScale"
+        }
+      },
+      "184": {
+        "inputs": {
+          "value": 1088
+        },
+        "class_type": "InstaCInteger",
+        "_meta": {
+          "title": "width"
+        }
+      }
+    }
+  }
+}
