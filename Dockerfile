@@ -8,13 +8,16 @@ WORKDIR /workspace
 ENV COMFYUI_SKIP_MANAGER=1 \
     COMFYUI_ARGS="--headless --disable-auto-scan"
 
-# Keep only the nodes/models that the workflow needs, drop everything else to avoid startup scans
-RUN rm -rf /comfyui/custom_nodes/* /comfyui/models/* \
+# Keep only the nodes/models that the workflow needs, drop everything else to avoid startup scans.
+# Preserve ComfyUI-Manager files so the comfy CLI keeps working, but skip it at runtime via env.
+RUN find /comfyui/custom_nodes -mindepth 1 -maxdepth 1 ! -name 'ComfyUI-Manager' -exec rm -rf {} + \
+ && rm -rf /comfyui/models/* \
  && mkdir -p /comfyui/models/{diffusion_models,clip,vae,loras} /comfyui/custom_nodes
 
 # Install only required custom nodes
-RUN comfy node install --exit-on-fail ComfyUI-GGUF@1.1.6
-RUN comfy node install --exit-on-fail rgthree-comfy@1.0.2511091959
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/* \
+ && comfy node install --exit-on-fail ComfyUI-GGUF@1.1.6 \
+ && comfy node install --exit-on-fail rgthree-comfy@1.0.2511091959
 
 # download only the models used by the workflow
 RUN comfy model download --url https://huggingface.co/QuantStack/Wan2.2-T2V-A14B-GGUF/resolve/main/LowNoise/Wan2.2-T2V-A14B-LowNoise-Q8_0.gguf --relative-path models/diffusion_models --filename Wan2.2-T2V-A14B-LowNoise-Q8_0.gguf
