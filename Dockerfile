@@ -29,3 +29,6 @@ RUN comfy model download --url https://huggingface.co/lightx2v/Wan2.2-Lightning/
 
 # Copy custom handler and base workflow
 COPY handler.py workflow_base.json /workspace/
+
+# Run our custom handler (expands slim input into full workflow) instead of the default ComfyUI handler.
+CMD ["python", "-u", "/workspace/handler.py"]
